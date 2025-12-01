@@ -1,22 +1,23 @@
 import { readFileSync } from "fs";
 
 export default function advent() {
-    const stringInput = readFileSync("input/day1-test.txt", "utf-8");
+    const stringInput = readFileSync("input/day1.txt", "utf-8");
     const input = stringInput.split(/\r\n/gm);
     console.log(findPassword(input));
-    // console.log(countRotations(0, 80, 150)); // should be 1.
-    // console.log(countRotations(0, -5, 5)); // should be 1.
-    // console.log(countRotations(0, -101, 101)); // should be 3.
-    // console.log(countRotations(0, -120, 100)); // should be 3
-    // console.log(countRotations(0, -130, -110)); // should be 0
-    // console.log(countRotations(0, 180, 200)); // should be 1;
-    // console.log(countRotations(0, 0, 150)); // should be 1;
-    // console.log(countRotations(0, -5, 0)); // should be 1;
-    // console.log(countRotations(0, -200, 400)); // should be 6
-    // console.log(countRotations(0, 0, 5)); // should be 0
-    // console.log(countRotations(0, -5, 0)); // should be 1.
 
+    // testcases
 
+    // console.log(countRotationsRight(0, 0, 100)); // 1
+    // console.log(countRotationsRight(0, 0, 50)); // 0
+    // console.log(countRotationsRight(0, -30, 0)); // 1
+    // console.log(countRotationsRight(0, -120, 200)); // 4
+    // console.log(countRotationsRight(0, -120, 270)); // 4
+
+    // console.log(countRotationsLeft(0, 50, 0)); // 1
+    // console.log(countRotationsLeft(0, 0, -50)); // 0
+    // console.log(countRotationsLeft(0, 50, 0)); // 1
+    // console.log(countRotationsLeft(0, 50, -150)); // 2
+    // console.log(countRotationsLeft(0, 100, 0)); // 1. 
 }
 
 function findPassword(input: string[]) {
@@ -30,10 +31,10 @@ function findPassword(input: string[]) {
 
         if(direction === "L") {
             nextPosition = currentPosition - amount;
-            password = countRotations(password, nextPosition, currentPosition);
+            password = countRotationsLeft(password, currentPosition, nextPosition);
         } else if(direction === "R") {
             nextPosition = currentPosition + amount;
-            password = countRotations(password, currentPosition, nextPosition);
+            password = countRotationsRight(password, currentPosition, nextPosition);
         }
         currentPosition = nextPosition;
 
@@ -42,29 +43,49 @@ function findPassword(input: string[]) {
     return password;
 }
 
-function countRotations(password: number, startPos: number, endPos: number) {
+// 50 --> 0 // 1 rotation
+function countRotationsLeft(password: number, startPos: number, endPos: number) {
+    if(endPos % 100 === 0) {
+        password++;
+    }
 
-    console.log(`going to check from ${startPos} to ${endPos}`);
+    if(startPos %100 === 0) {
+        password--;
+    }
 
-    // If we are in the same 'hundred', we haven't passed a zero.
-    if(Math.ceil(startPos / 100) === Math.ceil(endPos / 100)){
-        return password;
-    } 
-    else {
-        let stillChecking = true;
-        if(startPos % 100 === 0) {
-            password--;
+    let stillChecking = true;
+    let hundred = Math.floor(startPos / 100) * 100;
+
+    while(stillChecking){
+        // We have gone too far, end loop
+        if(hundred <= endPos) {
+            stillChecking = false;
         }
-        let hundred = Math.ceil(startPos / 100) * 100;
-        while(stillChecking){
-            // We have gone too far, end loop
-            if(hundred > endPos) {
-                stillChecking = false;
-            }
-            else {
-                password++;
-                hundred+=100;
-            }
+        else {
+            password++;
+            hundred-=100;
+        }
+    }
+
+    return password;
+}
+
+// For when the endPos is higher than the startPos.
+function countRotationsRight(password: number, startPos: number, endPos: number) {
+    let stillChecking = true;
+    if(startPos % 100 === 0) {
+        password--;
+    }
+
+    let hundred = Math.ceil(startPos / 100) * 100;
+    while(stillChecking){
+        // We have gone too far, end loop
+        if(hundred > endPos) {
+            stillChecking = false;
+        }
+        else {
+            password++;
+            hundred+=100;
         }
     }
     return password;
