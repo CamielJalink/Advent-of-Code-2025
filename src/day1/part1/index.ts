@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 
 export default function advent() {
-    const stringInput = readFileSync("input/day1.txt", "utf-8");
+    const stringInput = readFileSync("input/day1-test.txt", "utf-8");
     const input = stringInput.split(/\r\n/gm);
     console.log(findPassword(input));
 }
@@ -20,7 +20,9 @@ function findPassword(input: string[]) {
             currentPosition += amount;
         }
 
+        console.log(`Old currentposition is ${currentPosition}`);
         currentPosition = currentPosition % 100;
+        console.log(`After modulo, we now have: ${currentPosition}`)
 
         if(currentPosition === 0) {
             password++;
