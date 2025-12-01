@@ -20,9 +20,7 @@ function findPassword(input: string[]) {
             currentPosition += amount;
         }
 
-        console.log(`Old currentposition is ${currentPosition}`);
         currentPosition = currentPosition % 100;
-        console.log(`After modulo, we now have: ${currentPosition}`)
 
         if(currentPosition === 0) {
             password++;
