@@ -1,23 +1,36 @@
 import { readFileSync } from "fs";
+import UnitTest from "../../helpers/unittest";
 
 export default function advent() {
     const stringInput = readFileSync("input/day1.txt", "utf-8");
     const input = stringInput.split(/\r\n/gm);
-    console.log(findPassword(input));
 
     // testcases
+    const countRotationsRightTester = new UnitTest<[number,number,number], number>(
+        ([a, b, c]) => countRotationsRight(a, b, c)
+    );
 
-    // console.log(countRotationsRight(0, 0, 100)); // 1
-    // console.log(countRotationsRight(0, 0, 50)); // 0
-    // console.log(countRotationsRight(0, -30, 0)); // 1
-    // console.log(countRotationsRight(0, -120, 200)); // 4
-    // console.log(countRotationsRight(0, -120, 270)); // 4
+    countRotationsRightTester.runTests([
+        {input: [0,0,100], expected: 1},
+        {input: [0,0,50], expected: 0},
+        {input: [0,-30,0], expected: 1},
+        {input: [0, -120, 200], expected: 4},
+        {input: [0, -120, 270], expected: 4},
+    ]);
 
-    // console.log(countRotationsLeft(0, 50, 0)); // 1
-    // console.log(countRotationsLeft(0, 0, -50)); // 0
-    // console.log(countRotationsLeft(0, 50, 0)); // 1
-    // console.log(countRotationsLeft(0, 50, -150)); // 2
-    // console.log(countRotationsLeft(0, 100, 0)); // 1. 
+    const countRotationsLeftTester = new UnitTest<[number,number,number], number>(
+        ([password, startPos, endPos]) => countRotationsLeft(password, startPos, endPos)
+    );
+
+    countRotationsLeftTester.runTests([
+        {input: [0,50,0], expected: 1},
+        {input: [0,0,-50], expected: 0},
+        {input: [0,50,0], expected: 1},
+        {input: [0,50,-150], expected: 2},
+        {input: [0,100,0], expected: 1}
+    ])
+
+    console.log(findPassword(input));
 }
 
 function findPassword(input: string[]) {
@@ -37,13 +50,10 @@ function findPassword(input: string[]) {
             password = countRotationsRight(password, currentPosition, nextPosition);
         }
         currentPosition = nextPosition;
-
-        console.log(`After step ${input[i]} the password is at ${password} and the currentPosition at ${currentPosition}`)
     }
     return password;
 }
 
-// 50 --> 0 // 1 rotation
 function countRotationsLeft(password: number, startPos: number, endPos: number) {
     if(endPos % 100 === 0) {
         password++;
