@@ -2,7 +2,7 @@ import UnitTest from "../../helpers/unittest";
 import { countRotationsRight, countRotationsLeft } from "./index";
 
 // testcases
-export default function test() {
+export default function runTests() {
     const countRotationsRightTester = new UnitTest<[number,number,number], number>(
         ([password, startPos, endPos]) => countRotationsRight(password, startPos, endPos)
     );

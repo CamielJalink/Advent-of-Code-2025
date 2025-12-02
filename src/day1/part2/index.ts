@@ -1,10 +1,10 @@
 import { readFileSync } from "fs";
-import test from "./index.spec";
+import runTests from "./index.spec";
 
 export function advent() {
     const stringInput = readFileSync("input/day1.txt", "utf-8");
     const input = stringInput.split(/\r\n/gm);
-    test();
+    runTests();
     console.log(findPassword(input));
 }
 

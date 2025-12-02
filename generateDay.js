@@ -3,16 +3,26 @@ const prompt = require("prompt-sync")();
 let day = "day" + prompt("Which day do you wish to generate? Day:");
 
 const indexBoilerPlate = `import { readFileSync } from "fs";
+import runTests from "./index.spec";
 
-export default function advent() {
+export function advent() {
     const stringInput = readFileSync("input/${day}-test.txt", "utf-8");
     const input = stringInput.split(/\\n\\n/gm);
+    runTests();
     console.log(input);
 }`;
 
-const startPart1Boilerplate = `import advent from "./${day}/part1";
+const specBoilerPlate = `import UnitTest from "../../helpers/unittest";
+
+// testcases
+export default function runTests() {
+    console.log("Hello unit tests!");
+}
+`;
+
+const startPart1Boilerplate = `import { advent } from "./${day}/part1";
 advent();`;
-const startPart2Boilerplate = `import advent from "./${day}/part2";
+const startPart2Boilerplate = `import { advent } from "./${day}/part2";
 advent();`;
 
 fs.writeFileSync("./src/part1.ts", startPart1Boilerplate);
@@ -33,4 +43,5 @@ if (!fs.existsSync("./src/" + day)) {
 function createStructure(dirName) {
     fs.mkdirSync(dirName);
     fs.writeFileSync(dirName + "/index.ts", indexBoilerPlate);
+    fs.writeFileSync(dirName + "/index.spec.ts", specBoilerPlate);
 }
