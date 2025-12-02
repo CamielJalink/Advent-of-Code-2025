@@ -3,8 +3,11 @@ import { checkSequence, determineNextID } from "./index";
 
 // testcases
 export default function runTests() {
-    const determineNextIDTester = new UnitTest<string, string>((firstHalf: string) => determineNextID(firstHalf));
-    determineNextIDTester.runTest("1", "22");
+    const determineNextIDTester = new UnitTest<[string ,string], string>(
+        ([firstHalf, secondHalf]) => determineNextID(firstHalf, secondHalf)
+    );
+    
+    determineNextIDTester.runTest(["1", "1"], "22");
 
     const checkSequenceTester = new UnitTest<string, number>((sequenceString: string) => checkSequence(sequenceString));
     checkSequenceTester.runTest("11-22", 33);
@@ -15,5 +18,5 @@ export default function runTests() {
     checkSequenceTester.runTest("1698522-1698528", 0);
     checkSequenceTester.runTest("446443-446449", 446446);
     checkSequenceTester.runTest("38593856-38593862", 38593859);
+    checkSequenceTester.runTest("565653-565659", 0);
 }
-
