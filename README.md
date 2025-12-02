@@ -12,3 +12,7 @@ To start developing, run:
 4. Start developing and run your code using `npm run part1` and `npm run part2`
 
 Puzzles and input are found on https://advent-of-code.com
+
+Please note:
+
+- If you want to change back to an older day, just run the `generateDay` script again.
