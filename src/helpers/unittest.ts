@@ -6,17 +6,17 @@ export default class UnitTest<TInput, TOutput> {
     }
 
     runTest(input: TInput, expected: TOutput) {
-        const output = this.fn(input)
+        const output = this.fn(input);
         if(output !== expected) {
-            console.error(`Test with input ${input} returned ${output}. Expected ${expected}`)
+            console.error(`Test with input ${input} returned ${output}. Expected ${expected}`);
         } else {
-            console.log("Passed test")
+            console.log("Passed test");
         }
     }
 
     runTests(tests: {input: TInput, expected: TOutput}[]) {
         tests.forEach((test) => {
             this.runTest(test.input, test.expected);
-        })
+        });
     }
 }

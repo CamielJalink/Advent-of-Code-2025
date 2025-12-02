@@ -11,8 +11,8 @@ function findPassword(input: string[]) {
     let currentPosition = 50;
 
     for( let i = 0; i < input.length; i++ ) {
-        let direction = input[i][0];
-        let amount = parseInt(input[i].slice(1));
+        const direction = input[i][0];
+        const amount = parseInt(input[i].slice(1));
 
         if(direction === "L") {
             currentPosition -= amount;
