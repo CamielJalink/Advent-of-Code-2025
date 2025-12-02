@@ -3,7 +3,7 @@ import runTests from "./index.spec";
 
 export function advent() {
     const stringInput = readFileSync("input/day2.txt", "utf-8");
-    // runTests();
+    runTests();
     findSumOfInvalidIDs(stringInput);
 }
 
@@ -27,7 +27,7 @@ export function checkSequence(sequence: string): number{
 
     let withinBounds = true;
     while(withinBounds) {
-        // All uneven sequences are valid and don't need to be checken. 
+        // All uneven sequences are valid and don't need to be checked. 
         if(currentID.length %2 !== 0) {
             const length = currentID.length;
             currentID = "1";
@@ -38,6 +38,7 @@ export function checkSequence(sequence: string): number{
 
         const currentIDInt = parseInt(currentID);
 
+        // Only numbers within the sequence are relevant.
         if(currentIDInt > upperboundInt || currentIDInt < lowerboundInt) {
             withinBounds = false;
         } else {
@@ -48,20 +49,19 @@ export function checkSequence(sequence: string): number{
             if(firstHalf === secondHalf) {
                 invalidIDs += currentIDInt;
             }
-
-            currentID = determineNextID(firstHalf, secondHalf);
+            
+            // If check for the initial lowerbound. 
+            // 2824-2890 should find 2828. 
+            // However, 2429-2500 should not find 2424 because its below the lowerbound.
+            if(firstHalf !== secondHalf && parseInt(firstHalf + firstHalf) > lowerboundInt) {
+                currentID = firstHalf + firstHalf;
+            } else {
+                // For all other options, only check the possible wrong codes. 
+                let nextFirstHalfNum = parseInt(firstHalf) + 1;
+                currentID = nextFirstHalfNum.toString() + nextFirstHalfNum.toString();
+            }
         }
     }
 
     return invalidIDs;
-}
-
-export function determineNextID(firstHalf: string, secondHalf: string) {
-    // this is only the case with the very first number. 
-    if(firstHalf !== secondHalf) {
-        return firstHalf + firstHalf;
-    }
-
-    let nextFirstHalfNum = parseInt(firstHalf) + 1;
-    return nextFirstHalfNum.toString() + nextFirstHalfNum.toString();
 }
