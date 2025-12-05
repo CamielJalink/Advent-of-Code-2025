@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import runTests from "./index.spec";
 
 export function advent() {
-    const stringInput = readFileSync("input/day3-test.txt", "utf-8");
+    const stringInput = readFileSync("input/day3.txt", "utf-8");
     const input = stringInput.split(/\r\n/gm);
     runTests();
     console.log(findTotalJoltage(input));
@@ -19,24 +19,26 @@ function findTotalJoltage(batteryArrays: string[]) {
 }
 
 export function findJoltage(batteryArray: string) {
-    const firstBattery: { joltage: string; index: number } = { joltage: "0", index: 0 };
+    let battery: { joltage: string; index: number } = { joltage: "0", index: -1 };
+    let joltage = "";
 
-    // The last character in batteryArray may not be the first digit.
-    for (let i = 0; i < batteryArray.length - 1; i++) {
-        if (batteryArray[i] > firstBattery.joltage) {
-            firstBattery.joltage = batteryArray[i];
-            firstBattery.index = i;
+    for (let i = 11; i >= 0; i--) {
+        battery = findNextBattery(batteryArray, battery.index, i);
+        joltage += battery.joltage;
+    }
+
+    return parseInt(joltage);
+}
+
+function findNextBattery(batteryArray: string, startIndex: number, indexLimit: number) {
+    // Don't check the battery's before the previous battery's index again.
+    const battery: { joltage: string; index: number } = { joltage: "0", index: 0 };
+    for (let i = startIndex + 1; i < batteryArray.length - indexLimit; i++) {
+        if (batteryArray[i] > battery.joltage) {
+            battery.joltage = batteryArray[i];
+            battery.index = i;
         }
     }
 
-    // Don't check the battery's before the first battery again.
-    const secondBattery: { joltage: string; index: number } = { joltage: "0", index: 0 };
-    for (let i = firstBattery.index + 1; i < batteryArray.length; i++) {
-        if (batteryArray[i] > secondBattery.joltage) {
-            secondBattery.joltage = batteryArray[i];
-            secondBattery.index = i;
-        }
-    }
-
-    return parseInt(firstBattery.joltage + secondBattery.joltage);
+    return battery;
 }
