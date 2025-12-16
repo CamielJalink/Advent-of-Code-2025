@@ -27,14 +27,6 @@ export function checkSequence(sequence: string): number{
 
     let withinBounds = true;
     while(withinBounds) {
-        // All uneven sequences are valid and don't need to be checked. 
-        if(currentID.length %2 !== 0) {
-            const length = currentID.length;
-            currentID = "1";
-            for(let i = 0; i < length; i++){
-                currentID += "0";
-            }
-        }
 
         const currentIDInt = parseInt(currentID);
 
